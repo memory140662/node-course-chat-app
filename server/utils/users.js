@@ -1,6 +1,7 @@
 class Users {
     constructor() {
         this.users = [];
+        this.rooms = [];
     }
 
     addUser(id, name, room) {
@@ -8,6 +9,9 @@ class Users {
             id, name, room
         };
         this.users.push(user);
+        if (this.rooms.indexOf(room) === -1) {
+            this.rooms.push(room);
+        }
         return user;
     }
 
@@ -15,6 +19,9 @@ class Users {
         let user = this.getUser(id);
         if (user) {
             this.users = this.users.filter(user => user.id !== id);
+            if (this.getUserList(user.room).length ===  0) {
+                this.rooms = this.rooms.filter(room => room !== user.room);
+            }
         }
         return user;
     }
@@ -29,6 +36,12 @@ class Users {
             .map(user => user.name);
     }
 
+    isUserExists(name, room) {
+        return this.users.filter(user => (
+            user.name.toUpperCase() === name.toUpperCase()
+            && user.room.toUpperCase() === room.toUpperCase()
+        )).length > 0;
+    }
 }
 
 module.exports = { Users };
